@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Demo: Instant Payments API Layer</title>
+</head>
+<body>
+  <div class="container" aria-label="Instant Payments Demo">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h1>Business Demo: Instant Payments API Layer</h1>
+      <select id="langSelect" aria-label="Select language" onchange="changeLangBanner()">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+    <div id="lang-result"
+      style="background:#e9f5e1;color:#2d6a4f;padding:10px 20px;border-radius:8px;margin:12px 0;display:none;font-weight:600;text-align:center;max-width:320px;">
+      <!-- Result will appear here -->
+    </div>
+    <div class="intro">
+      <strong>Modernize legacy banking with instant, secure, and compliant payments—no core replacement required.</strong><br>
+      This demo shows how our API layer transforms business outcomes for banks, partners, and customers.
+    </div>
+
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+      <span style="font-weight:bold;color:#2d6a4f;">Live API Status:</span>
+      <span id="apiStatus" style="background:#e9f5e1;color:#2d6a4f;padding:6px 16px;border-radius:16px;font-weight:bold;">All systems operational</span>
+    </div>
+
+    <div class="dashboard" role="region" aria-label="Business Metrics Dashboard">
+      <div class="card" tabindex="0" aria-label="Total Payments">
+        <div class="card-title"><span aria-hidden="true">💸</span> Total Payments</div>
+        <div class="card-value" id="paymentsCount">1,245</div>
+        <div style="color:#888;font-size:0.95em;">Processed instantly</div>
+      </div>
+      <div class="card" tabindex="0" aria-label="Fraud Blocks">
+        <div class="card-title"><span aria-hidden="true">🛡️</span> Fraud Blocks</div>
+        <div class="card-value" id="fraudBlocks">7</div>
+        <div style="color:#888;font-size:0.95em;">Suspicious stopped</div>
+      </div>
+      <div class="card" tabindex="0" aria-label="Compliance Log Entries">
+        <div class="card-title"><span aria-hidden="true">📋</span> Compliance Log Entries</div>
+        <div class="card-value" id="auditLog">1,245</div>
+        <div style="color:#888;font-size:0.95em;">Every action tracked</div>
+      </div>
+      <div class="card" tabindex="0" aria-label="Customer Satisfaction">
+        <div class="card-title"><span aria-hidden="true">😊</span> Customer Satisfaction</div>
+        <div class="card-value" id="customerSatisfaction">98%</div>
+        <div style="color:#888;font-size:0.95em;">Based on feedback</div>
+      </div>
+      <div class="card" tabindex="0" aria-label="Avg. Settlement Time">
+        <div class="card-title"><span aria-hidden="true">⏱️</span> Avg. Settlement Time</div>
+        <div class="card-value" id="avgSettlement">1.7s</div>
+        <div style="color:#888;font-size:0.95em;">Instant payments</div>
+      </div>
+      <div class="card" tabindex="0" aria-label="Compliance Rate">
+        <div class="card-title"><span aria-hidden="true">✔️</span> Compliance Rate</div>
+        <div class="card-value" id="complianceRate">100%</div>
+        <div style="color:#888;font-size:0.95em;">Audit-ready</div>
+      </div>
+    </div>
+    <h2>ROI Calculator</h2>
+    <div style="background:#f1f3f4;border-radius:12px;padding:28px;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto;">
+      <label for="roiPayments">Monthly Payments:</label>
+      <input type="number" id="roiPayments" value="1000" min="1" style="width:100px;margin:0 12px 0 8px;">
+      <label for="roiCost">Cost per Payment (Legacy):</label>
+      <input type="number" id="roiCost" value="2" min="0" step="0.01" style="width:80px;margin:0 12px 0 8px;">
+      <button class="action-btn" onclick="calcROI()" style="margin-top:18px;">Calculate ROI</button>
+      <div id="roiResult" style="margin-top:18px;font-size:1.1em;color:#2d6a4f;font-weight:600;"></div>
+    </div>
+
+    <h2>Legacy vs. API-Enabled Payments</h2>
+    <div style="overflow-x:auto;margin-bottom:32px;">
+      <table style="width:100%;border-collapse:collapse;background:#f1f3f4;border-radius:12px;">
+        <thead>
+          <tr style="background:#e9f5e1;color:#1a3a5d;font-weight:600;">
+            <th style="padding:12px 8px;border-bottom:1px solid #ddd;">Feature</th>
+            <th style="padding:12px 8px;border-bottom:1px solid #ddd;">Legacy Payments</th>
+            <th style="padding:12px 8px;border-bottom:1px solid #ddd;">API-Enabled Payments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 8px;">Settlement Speed</td>
+            <td style="padding:10px 8px;">Hours to Days</td>
+            <td style="padding:10px 8px;">Seconds</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 8px;">Cost per Payment</td>
+            <td style="padding:10px 8px;">$2.00</td>
+            <td style="padding:10px 8px;">$0.20</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 8px;">Compliance & Audit</td>
+            <td style="padding:10px 8px;">Manual, error-prone</td>
+            <td style="padding:10px 8px;">Automated, 100% tracked</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 8px;">Customer Experience</td>
+            <td style="padding:10px 8px;">Delayed, uncertain</td>
+            <td style="padding:10px 8px;">Instant, transparent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <canvas id="paymentsChart" width="800" height="200" style="margin:32px 0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);"></canvas>
+
+    <div class="actions" role="region" aria-label="Business Actions">
+      <button class="action-btn" onclick="showResult('Payment sent instantly!')" title="Send a payment in any currency, instantly.">Send Instant Payment</button>
+      <button class="action-btn" onclick="showResult('Batch payments processed!')" title="Process multiple payments at once.">Batch Payments</button>
+      <button class="action-btn" onclick="showResult('Audit log entry created!')" title="Track every action for compliance.">View Audit Log</button>
+      <button class="action-btn" onclick="showResult('Metrics dashboard updated!')" title="Monitor real-time business metrics.">Monitor Metrics</button>
+      <button class="action-btn" onclick="showResult('Real-time update sent!')" title="Partners and customers notified instantly.">Send Real-Time Update</button>
+    </div>
+
+    <div class="result" id="resultBox" role="status" aria-live="polite"></div>
+
+    <!-- API Example Modal -->
+    <div id="api-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>API Request Example</h2>
+          <button class="close-btn" onclick="closeAPIModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="endpoint-name">
+            <span class="badge">POST</span>
+            <span class="endpoint-text">Send Instant Payment</span>
+          </div>
+          <!-- Request section -->
+          <div class="api-section">
+            <div class="section-header">
+              <span class="icon">📡</span>
+              <h3>REQUEST</h3>
+            </div>
+            <div class="code-block">
+              <pre><code id="request-code">POST https://api.newwavedevs.com/v1/payments
+
+Headers:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+Body:
+{
+  "amount": 100.00,
+  "currency": "USD",
+  "recipient_id": "user_abc123",
+  "payment_method": "solana_usdc",
+  "metadata": {
+    "order_id": "order_xyz789"
+  }
+}</code></pre>
+            </div>
+            <button class="copy-btn" onclick="copyCode('request-code')">Copy Request</button>
+          </div>
+          <!-- Response section -->
+          <div class="api-section">
+            <div class="section-header">
+              <span class="icon">✅</span>
+              <h3>RESPONSE <span class="response-time">(1847ms)</span></h3>
+            </div>
+            <div class="code-block">
+              <pre><code id="response-code">{
+  "status": "settled",
+  "transaction_id": "tx_def456",
+  "settlement_time_ms": 1847,
+  "fees": {
+    "amount": 0.02,
+    "currency": "USD"
+  },
+  "blockchain_tx": "5vY8h2pNfL9Qr3TmWxV6aZc8Kd1Jh4xK9Z",
+  "timestamp": "2025-11-21T14:32:18Z"
+}</code></pre>
+            </div>
+            <button class="copy-btn" onclick="copyCode('response-code')">Copy Response</button>
+          </div>
+          <!-- Latency breakdown -->
+          <div class="api-section">
+            <div class="section-header">
+              <span class="icon">⚡</span>
+              <h3>LATENCY BREAKDOWN</h3>
+            </div>
+            <div class="latency-breakdown">
+              <div class="latency-item">
+                <span class="latency-label">API Gateway:</span>
+                <span class="latency-value">45ms</span>
+                <div class="latency-bar">
+                  <div class="latency-fill" style="width: 4.5%"></div>
+                </div>
+              </div>
+              <div class="latency-item">
+                <span class="latency-label">Fraud Check:</span>
+                <span class="latency-value">52ms</span>
+                <div class="latency-bar">
+                  <div class="latency-fill" style="width: 5.2%"></div>
+                </div>
+              </div>
+              <div class="latency-item">
+                <span class="latency-label">Solana Settlement:</span>
+                <span class="latency-value">1710ms</span>
+                <div class="latency-bar">
+                  <div class="latency-fill" style="width: 92.6%"></div>
+                </div>
+              </div>
+              <div class="latency-item">
+                <span class="latency-label">Notification:</span>
+                <span class="latency-value">40ms</span>
+                <div class="latency-bar">
+                  <div class="latency-fill" style="width: 4%"></div>
+                </div>
+              </div>
+              <div class="latency-total">
+                <span class="latency-label">Total:</span>
+                <span class="latency-value">1847ms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="https://calendly.com/nwd-call/technical-walkthrough-instant-payments-api?utm_source=demo&utm_medium=api_modal&utm_campaign=technical_call" class="btn btn-primary" target="_blank">Book Technical Call</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- View API Example button -->
+    <div style="text-align: center; margin: 24px 0;">
+      <button class="view-api-btn" onclick="openAPIModal()">
+        📋 View API Example
+      </button>
+    </div>
+
+    <h2>Scenario Walkthrough</h2>
+    <div style="background:#f1f3f4;border-radius:8px;padding:24px;margin-bottom:32px;">
+      <ol>
+        <li><strong>Customer requests payment</strong> — API instantly checks for fraud and compliance.</li>
+        <li><strong>Currency conversion</strong> — Payment is converted if needed.</li>
+        <li><strong>Instant settlement</strong> — Payment is processed and settled in seconds.</li>
+        <li><strong>Real-time notification</strong> — Partners and customers are notified immediately.</li>
+        <li><strong>Audit log entry</strong> — Every action is tracked for compliance.</li>
+      </ol>
+    </div>
+
+    <h2>Feature Highlights</h2>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:32px;">
+      <div class="card" style="flex:1;min-width:180px;">
+        <div class="card-title"><span aria-hidden="true">⚡</span> Instant Payments</div>
+        <div style="color:#444;">Sub-2-second settlement, even on legacy infrastructure.</div>
+      </div>
+      <div class="card" style="flex:1;min-width:180px;">
+        <div class="card-title"><span aria-hidden="true">🌍</span> Multi-currency</div>
+        <div style="color:#444;">Pay in any currency, with automatic conversion.</div>
+      </div>
+      <div class="card" style="flex:1;min-width:180px;">
+        <div class="card-title"><span aria-hidden="true">🔒</span> Compliance</div>
+        <div style="color:#444;">Full audit trail for every action.</div>
+      </div>
+      <div class="card" style="flex:1;min-width:180px;">
+        <div class="card-title"><span aria-hidden="true">📦</span> Batch Payments</div>
+        <div style="color:#444;">Process hundreds of payments at once.</div>
+      </div>
+      <div class="card" style="flex:1;min-width:180px;">
+        <div class="card-title"><span aria-hidden="true">🔔</span> Real-Time Updates</div>
+        <div style="color:#444;">Instant notifications for partners and customers.</div>
+      </div>
+    </div>
+
+    <h2>FAQ</h2>
+    <div style="background:#f1f3f4;border-radius:8px;padding:24px;margin-bottom:32px;">
+      <strong>Q: Do I need to replace my core banking system?</strong><br>
+      <span>A: No! Our API layer works on top of your existing infrastructure.</span><br><br>
+      <strong>Q: How fast are payments processed?</strong><br>
+      <span>A: Most payments settle in under 2 seconds.</span><br><br>
+      <strong>Q: Is compliance and audit logging included?</strong><br>
+      <span>A: Yes, every action is tracked for full compliance.</span><br><br>
+      <strong>Q: Can I pay in any currency?</strong><br>
+      <span>A: Yes, multi-currency and FX conversion are built-in.</span>
+    </div>
+
+    <div class="footer">
+      <div class="nwd-links">
+        <a href="https://newwavedevs.com/about/" target="_blank">About</a>
+        <a href="https://newwavedevs.com/careers/" target="_blank">Careers</a>
+        <a href="https://newwavedevs.com/blog/" target="_blank">Blog</a>
+        <a href="https://newwavedevs.com/cases/" target="_blank">Cases</a>
+        <a href="https://newwavedevs.com/referral-program/" target="_blank">Referral Program</a>
+        <a href="https://newwavedevs.com/contact/" target="_blank">Hire Us</a>
+        <a href="https://newwavedevs.com/questions-and-answers/" target="_blank">FAQ</a>
+        <a href="https://newwavedevs.com/privacy-policy/" target="_blank">Privacy Policy</a>
+        <a href="https://www.instagram.com/newwavedevs/" target="_blank">Instagram</a>
+        <a href="https://www.behance.net/newwavedevs1/" target="_blank">Behance</a>
+        <a href="https://www.linkedin.com/company/new-wave-devs/" target="_blank">LinkedIn</a>
+        <a href="https://www.upwork.com/agencies/1164175694375657472/" target="_blank">Upwork</a>
+      </div>
+      
+      <!-- <strong>Ready to transform your payments?</strong><br>
+      Contact us for a business briefing or technical deep dive.<br>
+      &copy; New Wave Devs. All Rights Reserved 2025. -->
+
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://newwavedevs.com/wp-content/uploads/2024/05/logo-1.gif" alt="New Wave Devs logo" />
+        </div>
+        <div>
+          <span style="font-size:1.1em;color:#1a3a5d;font-weight:600;">Powered by <a href="https://newwavedevs.com/"
+              target="_blank" style="color:#2d6a4f;text-decoration:none;">New Wave Devs</a></span><br>
+          <span style="font-size:0.98em;color:#888;">Your Trusted IT Staff Augmentation Partner</span>
+        </div>
+      </div>
+    </div>
+  <img src="https://newwavedevs.com/wp-content/themes/nwd_seo/assets/img/icons/arrow-down-right-set-dark.svg" class="arrow" alt="arrow" />
+  <img src="https://newwavedevs.com/wp-content/themes/nwd_seo/assets/img/laces/3-dark.svg" class="lace-bottom" alt="lace bottom" />
+  </div>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function showResult(msg) {
+    var box = document.getElementById('resultBox');
+    box.innerText = msg;
+    box.style.display = 'block';
+    setTimeout(function(){ box.style.display = 'none'; }, 2500);
+  }
+  // Chart.js demo chart
+  window.onload = function() {
+    var ctx = document.getElementById('paymentsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Payments Volume',
+          data: [180, 220, 300, 250, 400, 320, 420],
+          backgroundColor: 'rgba(45,106,79,0.12)',
+          borderColor: '#2d6a4f',
+          borderWidth: 2,
+          pointBackgroundColor: '#1a3a5d',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  };
+  // Localization demo (static)
+  function changeLang() {
+    var lang = document.getElementById('langSelect').value;
+    showResult('Language changed to ' + lang + ' (demo only)');
+  }
+
+  // API Modal functions
+  function openAPIModal() {
+    var modal = document.getElementById('api-modal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Google Analytics tracking (якщо є GA)
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'api_example_view', {
+        'event_category': 'Demo Interaction',
+        'event_label': 'API Example Modal Opened'
+      });
+    }
+  }
+
+  function closeAPIModal() {
+    var modal = document.getElementById('api-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal on click outside
+  document.addEventListener('click', function(e) {
+    var modal = document.getElementById('api-modal');
+    if (e.target === modal) {
+      closeAPIModal();
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var modal = document.getElementById('api-modal');
+      if (modal.classList.contains('active')) {
+        closeAPIModal();
+      }
+    }
+  });
+
+  // Copy to clipboard function
+  function copyCode(elementId) {
+    var codeElement = document.getElementById(elementId);
+    var text = codeElement.textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      // Find the button that triggered this
+      var button = event.target;
+      var originalText = button.textContent;
+      button.textContent = '✓ Copied!';
+      button.classList.add('copied');
+      setTimeout(function() {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+      // Google Analytics tracking
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'code_copy', {
+          'event_category': 'Demo Interaction',
+          'event_label': elementId.includes('request') ? 'Request' : 'Response'
+        });
+      }
+    }).catch(function(err) {
+      console.error('Failed to copy:', err);
+      var button = event.target;
+      button.textContent = '✗ Failed';
+      setTimeout(function() {
+        button.textContent = 'Copy';
+      }, 2000);
+    });
+  }
+
+  // Language change demo
+  function changeLangBanner() {
+    var lang = document.getElementById('langSelect').value;
+    var resultBox = document.getElementById('lang-result');
+    resultBox.innerText = 'Language changed to ' + lang + ' (demo only)';
+    resultBox.style.display = 'block';
+    setTimeout(function () { resultBox.style.display = 'none'; }, 2500);
+  }
+</script>
+
+<script>
+  function calcROI() {
+    var payments = parseInt(document.getElementById('roiPayments').value) || 0;
+    var legacyCost = parseFloat(document.getElementById('roiCost').value) || 0;
+    var apiCost = 0.2; // Example API cost per payment
+    var savings = (legacyCost - apiCost) * payments;
+    var percent = legacyCost > 0 ? Math.round((savings / (legacyCost * payments)) * 100) : 0;
+    var result = 'Estimated monthly savings: <span style="color:#1a3a5d;">$' + savings.toFixed(2) + '</span> (' + percent + '% reduction)';
+    document.getElementById('roiResult').innerHTML = result;
+  }
+</script>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #f4f6fb 60%, #e9f5e1 100%);
+    margin: 0;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 56px auto 40px auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(26, 58, 93, 0.10);
+    padding: 56px 48px 40px 48px;
+    position: relative;
+  }
+
+  h1 {
+    color: #1a3a5d;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  h2 {
+    color: #2d6a4f;
+    margin-top: 36px;
+  }
+
+  .intro {
+    font-size: 1.18em;
+    color: #444;
+    margin-bottom: 28px;
+  }
+
+  .dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin: 44px 0;
+    justify-content: center;
+  }
+  .dashboard .card {
+    flex: 0 1 calc(33% - 32px);
+    min-width: 260px;
+    max-width: 320px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 900px) {
+    .dashboard .card {
+      flex: 0 1 calc(50% - 32px);
+      min-width: 220px;
+    }
+  }
+  @media (max-width: 600px) {
+    .dashboard {
+      gap: 16px;
+    }
+    .dashboard .card {
+      flex: 1 1 100%;
+      min-width: 160px;
+      max-width: 100%;
+    }
+  }
+
+  .card {
+    background: #f1f3f4;
+    border-radius: 16px;
+    padding: 32px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(26, 58, 93, 0.04);
+  }
+
+  .card-title {
+    font-size: 1.13em;
+    color: #2d6a4f;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .card-value {
+    font-size: 2.3em;
+    color: #1a3a5d;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .actions {
+    display: flex;
+    gap: 28px;
+    margin: 36px 0;
+    justify-content: center;
+  }
+
+  .action-btn {
+    background: linear-gradient(90deg, #1a3a5d 60%, #ffd600 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 18px 36px;
+    font-size: 1.05em;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(26, 58, 93, 0.04);
+    transition: background 0.2s;
+  }
+
+  .action-btn:hover {
+    background: linear-gradient(90deg, #2d6a4f 60%, #ffd600 100%);
+  }
+
+  .result {
+    background: #e9f5e1;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 28px 0;
+    font-size: 1.13em;
+    color: #2d6a4f;
+    text-align: center;
+    display: none;
+    font-weight: 600;
+  }
+
+  .benefits {
+    background: #e9f5e1;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 36px 0;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 24px;
+  }
+
+  .footer {
+    text-align: center;
+    color: #888;
+    margin-top: 48px;
+    font-size: 1em;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 8px;
+    margin-top: 24px;
+  }
+
+  .footer-logo img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nwd-links {
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .nwd-links a {
+    color: #1a3a5d;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: 500;
+  }
+
+  .nwd-links a:hover {
+    color: #ffd600;
+    text-decoration: underline;
+  }
+
+  .arrow {
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    width: 80px;
+    opacity: 0.10;
+  }
+
+  .lace-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    min-width: 960px;
+    z-index: -1;
+    opacity: 0.10;
+    pointer-events: none;
+  }
+
+  /* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(26, 58, 93, 0.10);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.endpoint-name {
+  display: flex;
+  align-items: center;
+  background: #e9f5e1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.badge {
+  background: #2d6a4f;
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  margin-right: 12px;
+}
+
+.endpoint-text {
+  font-size: 1.1em;
+  color: #1a3a5d;
+  font-weight: 500;
+}
+
+.api-section {
+  background: #f1f3f4;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.icon {
+  font-size: 1.5em;
+  margin-right: 8px;
+}
+
+h3 {
+  font-size: 1.1em;
+  color: #2d6a4f;
+  margin: 0;
+}
+
+.code-block {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  max-height: 300px;
+  position: relative;
+}
+
+.code-block pre {
+  margin: 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.copy-btn {
+  background: #2d6a4f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9em;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  transition: background 0.2s;
+}
+
+.copy-btn:hover {
+  background: #1a3a5d;
+}
+
+.response-time {
+  font-size: 0.9em;
+  color: #888;
+  margin-left: 8px;
+}
+
+.latency-breakdown {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.latency-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.latency-label {
+  color: #333;
+}
+
+.latency-value {
+  color: #2d6a4f;
+  font-weight: 500;
+}
+
+.latency-bar {
+  flex: 1;
+  height: 8px;
+  background: #e1e1e1;
+  border-radius: 4px;
+  margin-left: 12px;
+  position: relative;
+}
+
+.latency-fill {
+  height: 100%;
+  background: #2d6a4f;
+  border-radius: 4px;
+}
+
+.modal-footer {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  background: #2d6a4f;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #1a3a5d;
+}
+
+.view-api-btn {
+  background: #ffd600;
+  color: #1a3a5d;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.view-api-btn:hover {
+  background: #ffc107;
+}
+
+/* API Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 32px;
+}
+
+.endpoint-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.endpoint-name .badge {
+  background: #ffd600;
+  color: #0d0d0d;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.endpoint-name .endpoint-text {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.api-section {
+  margin-bottom: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.section-header .icon {
+  font-size: 20px;
+}
+
+.section-header h3 {
+  color: #ffd600;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.response-time {
+  color: #B0B0B0;
+  font-weight: 400;
+}
+
+.code-block {
+  background: #0d0d0d;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.code-block pre {
+  margin: 0;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.code-block code {
+  color: #e8e8e8;
+}
+
+.copy-btn {
+  background: rgba(255, 214, 0, 0.1);
+  border: 1px solid #ffd600;
+  color: #ffd600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: #ffd600;
+  color: #0d0d0d;
+}
+
+.copy-btn.copied {
+  background: #4ADE80;
+  border-color: #4ADE80;
+  color: #0d0d0d;
+}
+
+.latency-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.latency-item {
+  display: grid;
+  grid-template-columns: 180px 80px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.latency-label {
+  color: #B0B0B0;
+  font-size: 14px;
+}
+
+.latency-value {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: right;
+}
+
+.latency-bar {
+  background: rgba(255, 255, 255, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.latency-fill {
+  background: linear-gradient(90deg, #ffd600 0%, #4ADE80 100%);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.latency-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 4px;
+}
+
+.latency-total .latency-value {
+  color: #ffd600;
+  font-size: 16px;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 24px 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: #ffd600;
+  color: #0d0d0d;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #e6c200;
+}
+
+.view-api-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 214, 0, 0.1);
+  border: 1px solid rgba(255, 214, 0, 0.3);
+  color: #1a3a5d;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-api-btn:hover {
+  background: rgba(255, 214, 0, 0.2);
+  border-color: #ffd600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 16px;
+  }
+
+  .latency-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .code-block {
+    font-size: 11px;
+  }
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 214, 0, 0.3);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 214, 0, 0.5);
+}
